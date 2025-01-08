@@ -64,6 +64,8 @@ function cosign-cmd() {
     # breaks in them. If the COSIGN_PASSWORD and COSIGN_KEY vars were created
     # directly from the credential value then this would look more tidy.
     # (There are also numerous other ways to provide the secret key to cosign.)
+
+    echo "REKOR_HOST: ${REKOR_HOST}"
     COSIGN_PASSWORD=$(base64d "$COSIGN_SECRET_PASSWORD") \
     COSIGN_KEY=$(base64d "$COSIGN_SECRET_KEY") \
         cosign "$cmd" -y --key=env://COSIGN_KEY $REKOR_OPT "${opts[@]}" "$FULL_IMAGE_REF"
