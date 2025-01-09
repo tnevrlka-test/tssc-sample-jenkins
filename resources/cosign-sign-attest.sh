@@ -47,6 +47,7 @@ function cosign-cmd() {
     if [ -n "$REKOR_HOST" -a "$REKOR_HOST" != "none" ]; then
         # A rekor host was specified, let's use it
         REKOR_OPT="--rekor-url=$REKOR_HOST"
+        echo "Using REKOR_HOST: '$(echo "$REKOR_HOST" | base64)' as REKOR_OPT"
     else
         # If we don't set --rekor-url the default behavior would be to use the upstream
         # public Rekor instance at https://rekor.sigstore.dev. Rather than use that, let's
@@ -55,6 +56,7 @@ function cosign-cmd() {
         # (If you really want to use the upstream public Rekor then set your REKOR_HOST
         # environment var to "https://rekor.sigstore.dev".)
         REKOR_OPT="--tlog-upload=false"
+        echo "Skipping using REKOR_HOST"
     fi
 
     FULL_IMAGE_REF=$(full-image-ref)
@@ -65,7 +67,6 @@ function cosign-cmd() {
     # directly from the credential value then this would look more tidy.
     # (There are also numerous other ways to provide the secret key to cosign.)
 
-    echo "REKOR_HOST: ${REKOR_HOST}"
     COSIGN_PASSWORD=$(base64d "$COSIGN_SECRET_PASSWORD") \
     COSIGN_KEY=$(base64d "$COSIGN_SECRET_KEY") \
         cosign "$cmd" -y --key=env://COSIGN_KEY $REKOR_OPT "${opts[@]}" "$FULL_IMAGE_REF"
