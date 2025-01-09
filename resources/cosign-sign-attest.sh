@@ -40,6 +40,8 @@ function cosign-cmd() {
     local cmd="$1" && shift
     local opts=("$@")
 
+    printenv
+
     # Do some special handling if the value of REKOR_HOST is "none". This makes
     # it easier when testing these scripts without a real Rekor instance available.
     # Note that we're expecting REKOR_HOST to start with "http://" or "https://" so
